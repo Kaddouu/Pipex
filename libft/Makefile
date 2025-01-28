@@ -6,7 +6,7 @@
 #    By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/08 12:41:24 by ilkaddou          #+#    #+#              #
-#    Updated: 2024/11/18 13:23:10 by ilkaddou         ###   ########.fr        #
+#    Updated: 2025/01/28 21:58:38 by ilkaddou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,9 +49,8 @@ SOURCES = ft_atoi.c \
 		ft_putchar_fd.c \
 		ft_putstr_fd.c \
 		ft_putendl_fd.c \
-		ft_putnbr_fd.c
-
-BONUS = ft_lstadd_front_bonus.c \
+		ft_putnbr_fd.c \
+		ft_lstadd_front_bonus.c \
 		ft_lstsize_bonus.c \
 		ft_lstlast_bonus.c \
 		ft_lstadd_back_bonus.c \
@@ -60,8 +59,6 @@ BONUS = ft_lstadd_front_bonus.c \
 		ft_lstiter_bonus.c	\
 		ft_lstmap_bonus.c \
 		ft_lstnew_bonus.c
-
-BONUS_OBJECTS = $(BONUS:.c=.o)
 
 LIB = libft.h
 OBJECTS = $(SOURCES:.c=.o)
@@ -72,14 +69,11 @@ $(NAME): $(OBJECTS)
 	ar rcs $(NAME) $(OBJECTS) 
 
 clean:
-	rm -f $(OBJECTS) $(BONUS_OBJECTS)
+	rm -f $(OBJECTS)
 
 fclean: clean
 	rm -f $(NAME)
 
 re:	fclean all
-
-bonus: $(BONUS_OBJECTS) $(OBJECTS)
-	ar rcs $(NAME) $(OBJECTS) $(BONUS_OBJECTS)
 
 .PHONY: all clean fclean re bonus

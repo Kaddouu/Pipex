@@ -1,0 +1,7 @@
+apple 5
+banana 3
+cherry 8
+date 1
+elderberry 9
+fig 2
+grape 7
