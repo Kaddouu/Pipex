@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 16:46:04 by ilkaddou          #+#    #+#             */
-/*   Updated: 2024/11/17 13:12:43 by ilkaddou         ###   ########.fr       */
+/*   Created: 2025/01/30 21:06:16 by ilkaddou          #+#    #+#             */
+/*   Updated: 2025/01/30 21:10:50 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	num_words(char const *s, char c)
+static size_t	num_words(char const *s, char c, int in_dquotes, int in_squotes)
 {
 	size_t	num;
 
@@ -21,12 +21,20 @@ static size_t	num_words(char const *s, char c)
 		return (0);
 	while (*s)
 	{
-		while (*s == c)
+		while (*s == c && !in_dquotes && !in_squotes && *s)
 			s++;
 		if (*s)
+		{
 			num++;
-		while (*s != c && *s)
-			s++;
+			while ((*s != c || in_dquotes || in_squotes) && *s)
+			{
+				if (*s == '"' && !in_squotes)
+					in_dquotes = !in_dquotes;
+				if (*s == '\'' && !in_dquotes)
+					in_squotes = !in_squotes;
+				s++;
+			}
+		}
 	}
 	return (num);
 }
@@ -47,22 +55,61 @@ static void	ft_free(char **res, size_t i)
 static size_t	ft_word_len(char const *s, char c)
 {
 	size_t	word_len;
+	int		in_dquotes;
+	int		in_squotes;
 
 	word_len = 0;
-	if (!ft_strchr(s, c))
-				word_len = ft_strlen(s);
-	else
-		word_len = ft_strchr(s, c) - s;
+	in_dquotes = 0;
+	in_squotes = 0;
+	while (s[word_len] && (s[word_len] != c || in_dquotes || in_squotes))
+	{
+		if (s[word_len] == '"' && !in_squotes)
+			in_dquotes = !in_dquotes;
+		if (s[word_len] == '\'' && !in_dquotes)
+			in_squotes = !in_squotes;
+		word_len++;
+	}
 	return (word_len);
+}
+
+static char	*ft_clean_word(char const *s, size_t len,
+			int in_dquotes, int in_squotes)
+{
+	char	*word;
+	size_t	i;
+	size_t	j;
+
+	word = (char *)malloc(len + 1);
+	if (!word)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (j < len)
+	{
+		if ((s[j] == '"' && !in_squotes) || (s[j] == '\'' && !in_dquotes))
+			;
+		else
+			word[i++] = s[j];
+		if (s[j] == '"' && !in_squotes)
+			in_dquotes = !in_dquotes;
+		if (s[j] == '\'' && !in_dquotes)
+			in_squotes = !in_squotes;
+		j++;
+	}
+	word[i] = '\0';
+	return (word);
 }
 
 char	**ft_split(char const *s, char c)
 {
 	char	**res;
 	size_t	i;
+	size_t	word_len;
 
 	i = 0;
-	res = (char **)malloc((num_words(s, c) + 1) * sizeof (char *));
+	if (!s)
+		return (NULL);
+	res = (char **)malloc((num_words(s, c, 0, 0) + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
 	while (*s)
@@ -71,13 +118,11 @@ char	**ft_split(char const *s, char c)
 			s++;
 		if (*s)
 		{
-			res[i++] = ft_substr(s, 0, ft_word_len(s, c));
-			if (!res[i - 1])
-			{	
-				ft_free(res, i -1);
-				return (NULL);
-			}	
-			s += ft_word_len(s, c);
+			word_len = ft_word_len(s, c);
+			res[i] = ft_clean_word(s, word_len, 0, 0);
+			if (!res[i++])
+				return (ft_free(res, i - 1), NULL);
+			s += word_len;
 		}
 	}
 	res[i] = NULL;

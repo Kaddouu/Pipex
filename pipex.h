@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:59:35 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/01/28 21:45:12 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:09:28 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-# define ERR_CMD "Command not found\n"
-# define ERR_ENV "Environment not found\n"
-# define ERR_ARGS "Invalid number of arguments\n"
+# define ERR_CMD "Error: Command not found"
+# define ERR_ENV "Error: Environment not found"
+# define ERR_ARGS "Error: Invalid number of arguments"
 
 void	child_proc(char **av, char **env, int *fd);
 void	parent_proc(char **av, char **env, int *fd);
