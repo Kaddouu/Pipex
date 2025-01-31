@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 21:11:44 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/01/30 23:44:37 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/01/31 01:17:05 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,16 @@ char	*command_path(char *command, char **env)
 	while (env[i] && !ft_strnstr(env[i], "PATH", 4))
 		i++;
 	if (!env[i])
-		error_exit(ERR_ENV);
+		return (ft_putstr_fd("Error: PATH not found\n", 2), NULL);
 	split = ft_split(env[i] + 5, ':');
 	if (!split)
 		error_exit("Memory allocation failed in command_path\n");
 	if (access(command, F_OK) == 0)
-		return (command);
+		return (ft_free_tab(split), command);
 	path = try_paths(split, command);
 	ft_free_tab(split);
 	if (!path)
-	{
-		ft_putstr_fd("Error: Command not found\n", 2);
-		return (NULL);
-	}
+		return (ft_putstr_fd("Error: Command not found\n", 2), NULL);
 	return (path);
 }
 
