@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 22:02:24 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/01/28 21:59:02 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/01/31 09:28:47 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+void	ft_free_tab(char **tab);
 
 /*BONUS*/
 typedef struct s_list

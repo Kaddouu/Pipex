@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 21:11:39 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/01/31 01:20:20 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/01/31 09:10:32 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ void	child_proc(char **av, char **env, int *fd)
 	{
 		close(fd[0]);
 		close(fd[1]);
-		error_exit("Failed to open input file");
+		error_exit("Input file");
 	}
 	if (dup2(file1, STDIN_FILENO) < 0 || dup2(fd[1], STDOUT_FILENO) < 0)
 	{
 		close(file1);
 		close(fd[0]);
 		close(fd[1]);
-		error_exit("Child: Dup2 failed\n");
+		error_exit("Child process Dup2");
 	}
 	close(file1);
 	close(fd[0]);
@@ -52,7 +52,7 @@ void	parent_proc(char **av, char **env, int *fd)
 		close(file2);
 		close(fd[0]);
 		close(fd[1]);
-		error_exit("Parent: Dup2 failed");
+		error_exit("Child process Dup2");
 	}
 	close(file2);
 	close(fd[0]);

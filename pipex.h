@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:59:35 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/01/30 22:09:28 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/01/31 09:18:28 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,8 @@
 
 void	child_proc(char **av, char **env, int *fd);
 void	parent_proc(char **av, char **env, int *fd);
-char	*command_path(char *command, char **env);
-void	exec(char *arg_cmd, char **env);
-void	ft_free_tab(char **tab);
 void	error_exit(char *msg);
-
+void	ft_free_tab(char **tab);
+void	exec(char *arg_cmd, char **env);
+char	*command_path(char *command, char **env);
 #endif

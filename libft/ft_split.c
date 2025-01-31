@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 21:06:16 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/01/31 01:06:08 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/01/31 09:28:28 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static size_t	num_words(char const *s, char c, int in_dquotes, int in_squotes)
 	return (num);
 }
 
-static void	ft_free_split(char **tab)
+void	ft_free_tab(char **tab)
 {
 	int	i;
 
@@ -123,29 +123,10 @@ char	**ft_split(char const *s, char c)
 			word_len = ft_word_len(s, c);
 			res[i] = ft_clean_word(s, word_len, 0, 0);
 			if (!res[i++])
-				return (ft_free_split(res), NULL);
+				return (ft_free_tab(res), NULL);
 			s += word_len;
 		}
 	}
 	res[i] = NULL;
 	return (res);
 }
-/*int main()  
-{  
-	char *s = "Bonjour Bonjour ";
-    char c = ' ';
-	int i;  
-    char **result = ft_split(s, c);
-	if (result)
-	{
-		i = 0;
-		while (result[i] != NULL)
-		{
-			printf("%s\n", result[i]);
-			free(result[i]);
-			i++;
-		}
-		free(result);
-	} 
-    return 0;  
-}*/
