@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 21:11:44 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/01/31 10:15:00 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/01/31 10:20:22 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char	*try_paths(char **paths, char *cmd)
 			ft_free_tab(paths);
 			error_exit("Memory allocation failed");
 		}
-		path = ft_strjoin(temp, cmd);	
+		path = ft_strjoin(temp, cmd);
 		free(temp);
 		if (!path)
 		{
