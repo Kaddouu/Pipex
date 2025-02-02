@@ -6,13 +6,13 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 21:11:39 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/01/31 09:10:32 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/02/02 20:08:42 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	child_proc(char **av, char **env, int *fd)
+void	left_pipe(char **av, char **env, int *fd)
 {
 	int	file1;
 
@@ -23,20 +23,15 @@ void	child_proc(char **av, char **env, int *fd)
 		close(fd[1]);
 		error_exit("Input file");
 	}
-	if (dup2(file1, STDIN_FILENO) < 0 || dup2(fd[1], STDOUT_FILENO) < 0)
-	{
-		close(file1);
-		close(fd[0]);
-		close(fd[1]);
-		error_exit("Child process Dup2");
-	}
-	close(file1);
+	dup2(file1, STDIN_FILENO);
+	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
 	close(fd[1]);
+	close(file1);
 	exec(av[2], env);
 }
 
-void	parent_proc(char **av, char **env, int *fd)
+void	right_pipe(char **av, char **env, int *fd)
 {
 	int	file2;
 
@@ -45,44 +40,41 @@ void	parent_proc(char **av, char **env, int *fd)
 	{
 		close(fd[0]);
 		close(fd[1]);
-		error_exit("Failed to open output file");
+		error_exit("Output file");
 	}
-	if (dup2(fd[0], STDIN_FILENO) < 0 || dup2(file2, STDOUT_FILENO) < 0)
-	{
-		close(file2);
-		close(fd[0]);
-		close(fd[1]);
-		error_exit("Child process Dup2");
-	}
-	close(file2);
+	dup2(fd[0], STDIN_FILENO);
+	dup2(file2, STDOUT_FILENO);
 	close(fd[0]);
 	close(fd[1]);
+	close(file2);
 	exec(av[3], env);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	int		fd[2];
-	pid_t	pid;
+	pid_t	pid1;
+	pid_t	pid2;
 
 	if (ac != 5)
 		error_exit(ERR_ARGS);
 	if (!env)
 		error_exit(ERR_ENV);
-	if (pipe(fd) < 0)
-		error_exit("Pipe failed\n");
-	pid = fork();
-	if (pid < 0)
-	{
-		close(fd[0]);
-		close(fd[1]);
-		error_exit("Fork failed\n");
-	}
-	if (pid == 0)
-		child_proc(av, env, fd);
-	waitpid(pid, NULL, 0);
-	parent_proc(av, env, fd);
+	if (pipe(fd) == -1)
+		error_exit("Pipe");
+	pid1 = fork();
+	if (pid1 == -1)
+		error_exit("Fork");
+	if (pid1 == 0)
+		left_pipe(av, env, fd);
+	pid2 = fork();
+	if (pid2 == -1)
+		error_exit("Fork");
+	if (pid2 == 0)
+		right_pipe(av, env, fd);
 	close(fd[0]);
 	close(fd[1]);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
 	return (0);
 }
